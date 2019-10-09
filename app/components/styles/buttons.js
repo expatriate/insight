@@ -5,6 +5,40 @@ import { Colors } from './colors';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 export default StyleSheet.create({
+  redButton: {
+    borderRadius: 30,
+    backgroundColor: Colors.COLOR_RED,
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    marginBottom: 30
+  },
+  redButtonText: {
+    fontSize: responsiveFontSize(2.4),
+    color: Colors.COLOR_WHITE,
+    textAlign: 'center'
+  },
+
+  lineButton: {
+    marginBottom: 30
+  },
+  lineButtonText: {
+    textDecorationLine: 'underline',
+    fontSize: responsiveFontSize(2.4),
+    color: Colors.COLOR_BLACK_08,
+    textAlign: 'center'
+  },
+
+
+
+
+
+
+
+
+
+
+
+
   touchWrapper: {
     width: '100%',
   },
@@ -16,7 +50,7 @@ export default StyleSheet.create({
     borderRadius: responsiveWidth(10),
   },
 
-  
+
   buttonBig: {
     borderRadius: responsiveWidth(10),
     paddingVertical: responsiveHeight(2.5),

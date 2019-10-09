@@ -1,23 +1,85 @@
 import {
-} from '../actions/app.js';
-
-import {
+  getAllTasks,
+  getAllSpectatorTasks,
+  getImages,
+  filterTasks,
+  saveTask,
+  changeStatus,
+  savePhoto,
+  setVisited
 } from '../actions/tasks.js';
 
 import {
   navigateToMainPage,
-  navigateToLogin
+  navigateToLogin,
+  navigateToDetail,
+  navigateToFilter,
+  navigateToEdit,
+  navigateBack,
+  navigateToProjects
 } from '../actions/nav.js';
 
 import {
-  login
-} from '../actions/user.js';
+  getUserProjects,
+  getAllProjects,
+  getAllSpectatorProjects,
+} from '../actions/projects.js';
 
 import {
-} from '../actions/team.js';
+  getUserCompanies,
+  getAllCompanies
+} from '../actions/companies.js';
+
+import {
+  getStatuses,
+  getProjectStatuses
+} from '../actions/statuses.js';
+
+import {
+  getTowns
+} from '../actions/towns.js';
+
+import {
+  login,
+  getUserStatuses,
+  getTaskMasters,
+  getAgents,
+  sendPhoneToken
+} from '../actions/user.js';
 
 export {
+  getAllTasks,
+  getAllSpectatorTasks,
+  getImages,
+  filterTasks,
+  saveTask,
+  changeStatus,
+  savePhoto,
+  setVisited,
+
+  navigateToDetail,
   navigateToMainPage,
   navigateToLogin,
-  login
+  navigateToFilter,
+  navigateToEdit,
+  navigateBack,
+  navigateToProjects,
+
+  getUserProjects,
+  getAllProjects,
+  getAllSpectatorProjects,
+
+  getUserCompanies,
+  getAllCompanies,
+
+  getStatuses,
+  getProjectStatuses,
+
+  getTowns,
+
+  login,
+  getUserStatuses,
+  getTaskMasters,
+  getAgents,
+  sendPhoneToken
 };

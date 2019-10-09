@@ -17,13 +17,13 @@ export const Colors = {
   COLOR_BTN_ICON_GRAY: '#D8DFE5',
   COLOR_WHITE: '#FFFFFF',
   COLOR_WHITE_06: 'rgba(255,255,255,0.6)',
+  COLOR_BLACK_01: 'rgba(0,0,0,0.1)',
   COLOR_BLACK_02: 'rgba(0,0,0,0.2)',
   COLOR_BLACK_08: 'rgba(0,0,0,0.8)',
   COLOR_BLACK_04: 'rgba(0,0,0,0.4)',
   COLOR_INPUT_BORDER: '#E0E0E0',
 
   COLOR_DARK_GREEN: 'rgba(24,67,85,0.6)',
-  COLOR_GREEN: '#54b422',
   COLOR_SALAD_GREEN: '#ddf0d3',
 
   COLOR_LIGHT_BLUE: '#35B2B4',
@@ -35,9 +35,19 @@ export const Colors = {
   COLOR_BORDER: '#e5e5e5',
 
   COLOR_YELLOW: '#ffb700',
+  COLOR_YELLOW_04: 'rgba(255,183,0,0.3)',
+
+  COLOR_GREEN: '#54b422',
+  COLOR_GREEN_04: 'rgba(84,180,34,0.3)',
+
+  COLOR_BLUE: '#2c94d6',
+  COLOR_BLUE_04: 'rgba(44,148,214,0.3)',
+
   COLOR_LIGHT_YELLOW: '#fdbb24',
 
   COLOR_RED: '#ee5f5b',
+  COLOR_RED_04: 'rgba(238,95,91,0.3)',
+  
   COLOR_DARK_RED: '#d3182f',
 
   COLOR_ORANGE: '#FF6300',

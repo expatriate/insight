@@ -6,19 +6,26 @@ import { Colors } from '../../styles/colors';
 import { responsiveHeight, responsiveWidth, responsiveFontSize } from 'react-native-responsive-dimensions';
 
 export default StyleSheet.create({
-  registrationContainer: {
-    backgroundColor: Colors.COLOR_WHITE,
-    paddingHorizontal: responsiveWidth(10),
-    flex: 1,
+  mainSvg: {
+    position: 'absolute',
+    left: -2,
+    right: -2,
+    top: -2,
+    bottom: -2,
+    zIndex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  privacyText: {
-    marginTop: responsiveHeight(4),
-    fontSize: responsiveFontSize(2),
-    color: Colors.COLOR_DARK_GRAY,
+  main: {
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flex: 1
   },
-  privacyLink: {
-    fontSize: responsiveFontSize(2),
-    color: Colors.COLOR_BLUE_LINK,
-    fontWeight: 'bold'
+  activity: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'column',
+    position: 'relative',
   }
 });

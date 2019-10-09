@@ -1,4 +1,4 @@
-platform :ios, '9.0'
+platform :ios, '10.0'
 require_relative '../node_modules/@react-native-community/cli-platform-ios/native_modules'
 
 target 'InsightReactApp' do
@@ -28,27 +28,22 @@ target 'InsightReactApp' do
   pod 'glog', :podspec => '../node_modules/react-native/third-party-podspecs/glog.podspec'
   pod 'Folly', :podspec => '../node_modules/react-native/third-party-podspecs/Folly.podspec'
 
-  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
+
+
+
+
+
+
+
+  pod 'RNCPushNotificationIOS', :path => '../node_modules/@react-native-community/push-notification-ios'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
-
-
-  pod 'react-native-geolocation', :path => '../node_modules/@react-native-community/geolocation'
-
-  target 'InsightReactAppTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
   use_native_modules!
 end
 
 target 'InsightReactApp-tvOS' do
   # Pods for InsightReactApp-tvOS
-
-  target 'InsightReactApp-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
 
 end

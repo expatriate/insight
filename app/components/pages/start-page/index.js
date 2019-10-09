@@ -2,19 +2,40 @@ import React, { Component } from 'react';
 import {
     ActivityIndicator,
     StatusBar,
-    AsyncStorage
+    Dimensions,
+    View,
+    Text,
+    Image
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import AsyncStorage from '@react-native-community/async-storage';
+import * as Animatable from 'react-native-animatable';
 
 import {
   login,
   navigateToMainPage,
-  navigateToLogin
+  navigateToLogin,
+  getStatuses,
+  getTowns,
+  getUserStatuses,
+  getProjectStatuses
 } from '../../../actions';
+
+import Svg, {
+    Path,
+} from 'react-native-svg';
+
+import {
+  Colors
+} from '../../styles/colors.js';
+
+import styles from './styles';
 
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import baseStyles from '../../styles/base.js';
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 class StartPage extends Component {
 
@@ -26,34 +47,30 @@ class StartPage extends Component {
     }
   };
 
-  componentDidMount() {
-    StatusBar.setBarStyle('light-content');
-    AsyncStorage.getAllKeys((err, keys) => {
-      AsyncStorage.multiGet(keys, (err, stores) => {
-        stores.map((result, i, store) => {
-          // get at each store's key/value so you can work with it
-          let key = store[i][0];
-          let value = store[i][1];
-          this.state[key] = value
-        });
-      });
-    });
-    setTimeout(() => {
-      if(this.state.username.length && this.state.password.length){
-        let username = this.state.username;
-        username = username.replace(/"/g, '')
-        let password = this.state.password;
-        password = password.replace(/"/g, '')
-        this.props.login(username, password)
-      }else{
-        this.props.navigateToMainPage()
-      }
-    }, 500);
+  async componentDidMount() {
 
+    this.props.getStatuses();
+    this.props.getProjectStatuses();
+    this.props.getTowns();
+    this.props.getUserStatuses();
 
-    setTimeout(() => {
-      this.props.navigateToLogin()
-    }, 2000)
+    let values, tempphone, temppassword;
+    try {
+      values = await AsyncStorage.multiGet(['phone', 'password'])
+      tempphone = values[0][1];
+      temppassword = values[1][1].replace(/ /g, '"');
+    } catch(e) {
+    }
+    if (tempphone && temppassword) {
+      setTimeout(() => {
+        this.props.login(tempphone, temppassword, true)
+      }, 2000)
+
+    } else {
+      setTimeout(() => {
+        this.props.navigateToLogin()
+      }, 2000)
+    }
   };
 
   componentWillUnmount() {
@@ -61,18 +78,77 @@ class StartPage extends Component {
 
   render() {
     return (
-      <LinearGradient style={baseStyles.contentAtCenter} colors={['#31a3b7', '#3dccc6']}>
-        <ActivityIndicator />
-      </LinearGradient>
+      <View style={styles.main}>
+        <Animatable.View style={styles.mainSvg} animation={'rotate'} direction={'reverse'} duration="13000" easing={'linear'}>
+          <Svg width={viewportHeight+100} height={viewportHeight+100} viewBox="0 0 815 812">
+            <Path fill={Colors.COLOR_DARK_RED}
+            d="M815.956,812.956c-271.682,0-543.319,0-814.913,0c0-270.682,0-541.318,0-811.912
+              c271.682,0,543.319,0,814.913,0C815.956,271.725,815.956,542.362,815.956,812.956z M297.806,579.711
+              c-26.305-13.941-50.038-34.438-69.475-59.601c-28.116-36.397-41.364-78.175-42.35-123.993c-0.836-38.87,8.395-75.282,26.958-109.341
+              c21.189-38.877,50.574-70.146,88.502-93.001c53.663-32.339,111.515-41.009,172.598-28.55c41.28,8.419,78.676,25.547,111.444,52.25
+              c19.567,15.946,37.798,33.23,51.701,54.555c34.321,52.641,49.873,110.313,45.989,173.088
+              c-4.736,76.56-37.152,140.532-93.034,191.462c-69.434,63.28-152.78,84.514-245.088,71.831c-35.086-4.82-68.155-16.507-99.148-33.718
+              c-19.675-10.925-39.155-22.386-55.556-37.943c-36.271-34.408-63.382-75.186-82.465-121.377
+              c-13.144-31.814-20.896-64.945-24.346-99.095c-3.218-31.839-1.494-63.593,4.53-94.933c5.723-29.773,17.194-57.653,31.252-84.455
+              c21.167-40.354,48.713-75.809,84.646-103.836c53.23-41.517,112.977-68.353,180.673-76.303c35.914-4.219,71.526-2.903,106.889,3.942
+              c38.433,7.439,74.896,20.304,109.075,39.873c33.227,19.024,63.196,42.079,89.697,69.507c37.584,38.898,66.314,83.62,85.555,134.299
+              c0.728,1.915,1.579,3.782,2.372,5.672c0.704-1.211,0.923-2.246,0.672-3.15c-4.65-16.787-8.593-33.818-14.208-50.279
+              c-12.333-36.155-32.153-68.272-55.621-98.191c-20.118-25.649-43.052-48.667-67.819-69.763
+              c-10.598-9.026-21.785-17.741-33.842-24.598c-28.445-16.176-59.533-25.294-91.563-31.568c-31.089-6.091-62.343-11.037-94.03-11.407
+              c-38.497-0.45-76.375,4.62-113.184,16.368c-31.354,10.008-61.763,22.288-87.972,42.62c-21.956,17.033-43.686,34.494-64.224,53.186
+              c-35.11,31.95-64.86,68.44-86.438,111.022C43.703,296.169,30.567,351,35.772,409.348c5.923,66.402,27.987,127.285,65.776,182.162
+              c35.521,51.586,80.154,93.091,136.859,120.986c42.82,21.065,87.822,33.681,135.445,36.454c46.63,2.716,92.013-3.906,135.891-20.012
+              c38.694-14.203,74.251-33.897,103.865-62.941c32.979-32.345,58.175-70.134,75.821-112.859
+              c24.861-60.191,31.311-122.564,21.303-186.701c-5.186-33.232-15.019-65.083-31.104-94.765
+              c-22.472-41.465-51.465-77.451-91.128-103.642c-64.478-42.576-135.463-57.755-211.578-45.929
+              c-64.219,9.978-118.682,39.581-162.192,88.068c-41.162,45.871-64.135,100.101-69.625,161.333
+              c-3.833,42.763,3.179,84.161,19.464,124.005c16.375,40.064,39.789,74.851,74.398,101.49c61.547,47.374,130.456,64.837,206.75,49.2
+              c43.93-9.003,81.658-30.602,114.137-61.49c21.375-20.328,37.308-44.16,47.209-71.962c9.506-26.691,15.296-54.14,15.7-82.534
+              c0.396-27.813-3.285-55.11-12.461-81.455c-4.137-11.876-9.109-23.462-13.203-33.902c0.601,0.853,2.261,2.731,3.389,4.889
+              c15.161,29.007,23.77,59.999,26.201,92.505c2.739,36.616-3.513,71.988-17.37,106.008c-6.031,14.809-11.927,29.836-22.1,42.305
+              c-65.37,80.124-149.449,111.179-250.526,90.697c-67.372-13.65-120.044-51.63-156.825-109.91
+              c-23.917-37.898-38.633-79.523-42.926-124.396c-2.223-23.24-3.042-46.467,1.002-69.735c11.495-66.144,40.573-122.558,92.092-166.3
+              c14.16-12.021,29.331-23.165,45.198-32.802c36.334-22.066,76.059-34.771,118.392-39.308c26.5-2.839,52.973-2.538,79.211,1.745
+              c45.424,7.416,87.631,23.194,125.253,50.319c24.098,17.375,45.396,37.658,63.541,61.117c28.226,36.493,46.979,77.489,56.998,122.52
+              c5.504,24.738,9.7,49.662,10.094,75.056c1.182,76.349-20.121,145.817-63.639,208.631c-20.856,30.105-46.25,55.637-76.475,75.979
+              c-46.007,30.964-96.862,49.643-151.912,56.931c-46.351,6.137-92.025,2.973-137.079-9.307
+              c-53.15-14.484-100.883-39.346-142.707-75.291c-46.046-39.575-81.669-86.961-106.243-142.561c-0.267-0.603-0.744-1.112-1.122-1.665
+              c-0.372,0.158-0.744,0.315-1.115,0.473c3.576,11.513,5.989,23.56,10.989,34.415c8.263,17.938,17.822,35.316,27.506,52.554
+              c16.125,28.701,36.106,54.632,58.3,78.908c33.884,37.063,74.628,63.249,122.476,78.687c35.743,11.531,72.385,17.385,109.765,19.095
+              c53.933,2.468,106.542-3.85,157.361-23.162c22.778-8.656,44.959-18.521,65.68-31.184c30.876-18.867,57.62-42.605,81.37-70.094
+              c21.36-24.721,39.153-51.683,55.899-79.538c17.234-28.668,29.429-59.271,35.604-92.112c3.496-18.592,6.228-37.346,8.65-56.111
+              c1.296-10.031,2.209-20.313,1.499-30.354c-0.973-13.745-3.055-27.487-5.705-41.025c-11.313-57.776-34.271-110.536-69.814-157.562
+              c-34.515-45.664-76.252-82.741-128.125-108.1c-64.834-31.693-132.622-44.81-204.48-35.347
+              c-32.111,4.229-62.729,13.731-92.057,26.994c-23.754,10.743-45.23,25.55-65.556,41.879c-34.418,27.652-62.641,60.639-84.373,99.09
+              c-10.847,19.191-20.623,39.098-26.105,60.397c-13.29,51.637-13.845,103.783-2.582,155.937
+              c9.463,43.818,26.743,84.389,52.594,121.023c22.689,32.153,48.487,61.062,83.421,81.044
+              c57.583,32.938,118.704,47.835,184.969,40.095c35.738-4.174,69.647-14.233,101.67-30.625c29.71-15.208,55.131-35.79,77.605-60.438
+              c27.223-29.854,46.703-63.952,58.023-102.596c13.906-47.473,14.16-95.386,1.801-143.152c-12.759-49.313-35.146-93.821-73.084-128.51
+              c-69.372-63.429-150.307-82.177-239.995-54.485C246.711,210.903,183.72,310.367,193.038,413.611
+              c4.86,53.844,25.686,100.339,67.125,136.263C272.818,560.846,286.417,570.729,297.806,579.711z"/>
+            </Svg>
+          </Animatable.View>
+            <View style={styles.activity}>
+              <Image
+                style={{width: 200, height: 112, resizeMode: 'contain', marginBottom: 30, marginTop: 30}}
+                source={require('../../../../assets/images/logo.jpg')}
+              />
+            </View>
+      </View>
+
     );
   };
 };
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-      login: (username, password) => login(username, password),
+      login: (username, password, checkStorage) => login(username, password, checkStorage),
       navigateToMainPage: navigateToMainPage,
-      navigateToLogin: navigateToLogin
+      navigateToLogin: navigateToLogin,
+      getStatuses: getStatuses,
+      getTowns: getTowns,
+      getUserStatuses: getUserStatuses,
+      getProjectStatuses: getProjectStatuses
     }, dispatch);
 }
 

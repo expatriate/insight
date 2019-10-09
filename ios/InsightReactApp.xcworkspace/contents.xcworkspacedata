@@ -2,9 +2,12 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:InsightReactApp.xcodeproj">
+      location = "group:/Users/dmitrij/Documents/Projects/Insight/InsightReactApp/ios/InsightReactApp.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:InsightReactApp.xcodeproj">
    </FileRef>
 </Workspace>

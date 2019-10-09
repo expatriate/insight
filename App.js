@@ -9,6 +9,13 @@ import thunk from 'redux-thunk';
 import * as reducers from "./app/reducers/index.js";
 import axios from 'axios';
 import RootNavigator from './app/navigators/AppNavigator';
+
+import {
+  Alert
+} from 'react-native'
+
+//import PushNotification from 'react-native-push-notification';
+
 import {
   StatusBar,
   BackHandler,
@@ -47,14 +54,22 @@ const store = createStore(
   applyMiddleware(thunk, middleware)
 );
 
+
+
+
 export default class Root extends Component {
 
   componentDidMount() {
 
+    //notificationService(this._onRegistered, this._onLocalNotification)
+
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   }
 
+
   componentWillUnmount() {
+
+
     BackHandler.removeEventListener("hardwareBackPress", this.onBackPress);
   }
 

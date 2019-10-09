@@ -1,11 +1,15 @@
 import user from './user';
-import app from './app';
 import nav from './nav';
 import tasks from './tasks';
-import team from './team';
+import statuses from './statuses';
+import towns from './towns';
+import companies from './companies';
+import projects from './projects';
 
 export {user};
-export {app};
 export {nav};
 export {tasks};
-export {team};
+export {statuses};
+export {towns};
+export {companies};
+export {projects};

@@ -12,6 +12,38 @@ NavigationActions.navigate({
   routeName: 'Login',
 });
 
+export const navigateToFilter = () =>
+NavigationActions.navigate({
+  routeName: 'Filter',
+});
+
+export const navigateToEdit = (task) =>
+NavigationActions.navigate({
+  routeName: 'Edit',
+  params: {
+    task: task,
+  },
+  key: 'Edit_' + task.id + new Date().getTime()
+});
+
+export const navigateToProjects = (companyid) =>
+NavigationActions.navigate({
+  routeName: 'Projects',
+  params: {
+    companyid: companyid,
+  },
+  key: 'Project_' + companyid + new Date().getTime()
+});
+
+export const navigateToDetail = (task) =>
+NavigationActions.navigate({
+  routeName: 'Detail',
+  params: {
+    task: task,
+  },
+  key: 'Detail_' + task.id + new Date().getTime()
+});
+
 export const navigateToForget = () =>
 NavigationActions.navigate({
   routeName: 'ForgetPassword',
@@ -22,9 +54,13 @@ NavigationActions.navigate({
   routeName: 'CreateTask',
 });
 
-export const navigateToMainPage = () =>
+export const navigateToMainPage = (projectid) =>
 NavigationActions.navigate({
-  routeName: 'MainPage',
+  routeName: 'Main',
+  params: {
+    projectid: projectid,
+  },
+  key: 'Main_' + projectid + new Date().getTime()
 });
 
 export const navigateToMyReviews = () =>

@@ -33,23 +33,33 @@ export default StyleSheet.create({
   },
   inputText: {
     color: Colors.COLOR_WHITE,
-    fontSize: responsiveFontSize(2.4),
+    fontSize: responsiveFontSize(2.2),
     textAlign: 'center'
   },
   inputButton: {
-    borderRadius: 60,
+    borderRadius: 70,
     backgroundColor: Colors.COLOR_RED,
-    paddingVertical: 20,
-    paddingHorizontal: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
     alignContent: 'center',
     justifyContent: 'center',
     flexDirection: 'column',
-    width: 100,
-    height: 100,
+    width: 140,
+    height: 140,
   },
   inputContainer: {
     width: '100%',
     marginBottom: 30,
     position: 'relative',
   },
+  errorContainer: {
+    width: '100%',
+    height: 50,
+    marginTop: 10
+  },
+  errorText: {
+    fontSize: responsiveFontSize(2.2),
+    color: Colors.COLOR_RED_04,
+    textAlign: 'center'
+  }
 });

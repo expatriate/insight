@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>568135003489-4qcnud4imp3eolni041d330tu9rtpho4.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.568135003489-4qcnud4imp3eolni041d330tu9rtpho4</string>
+	<key>API_KEY</key>
+	<string>AIzaSyCW7fdKZL0icLwaqycPK9OirIMreULsWSM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>568135003489</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>InsightReactApp</string>
+	<key>PROJECT_ID</key>
+	<string>insight-341ba</string>
+	<key>STORAGE_BUCKET</key>
+	<string>insight-341ba.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:568135003489:ios:7c0dc327c5d741f5326920</string>
+	<key>DATABASE_URL</key>
+	<string>https://insight-341ba.firebaseio.com</string>
+</dict>
+</plist>

@@ -16,6 +16,11 @@ import {
 import StartPage from '../components/pages/start-page';
 import LoginPage from '../components/pages/login-page';
 import MainPage from '../components/pages/main-page';
+import CompaniesPage from '../components/pages/companies-page';
+import ProjectsPage from '../components/pages/projects-page';
+import DetailPage from '../components/pages/detail-page';
+import FilterPage from '../components/pages/filter-page';
+import EditPage from '../components/pages/edit-page';
 
 
 export default RootNavigator = createStackNavigator({
@@ -33,6 +38,36 @@ export default RootNavigator = createStackNavigator({
   },
   Main: {
     screen: MainPage,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Detail: {
+    screen: DetailPage,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Companies: {
+    screen: CompaniesPage,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Projects: {
+    screen: ProjectsPage,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Filter: {
+    screen: FilterPage,
+    navigationOptions: {
+      header: null
+    },
+  },
+  Edit: {
+    screen: EditPage,
     navigationOptions: {
       header: null
     },

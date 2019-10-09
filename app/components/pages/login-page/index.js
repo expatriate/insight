@@ -12,8 +12,9 @@ import {
   TouchableHighlight,
   Alert,
   KeyboardAvoidingView,
-  StatusBar, AsyncStorage
+  StatusBar
 } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import LinearGradient from 'react-native-linear-gradient';
 import { TextInputMask } from 'react-native-masked-text';
 import { EventRegister } from 'react-native-event-listeners';
@@ -21,7 +22,6 @@ import Svg, {
     Polygon,
     Path
 } from 'react-native-svg';
-
 
 import {
   login,
@@ -42,11 +42,6 @@ import {
 
 class LoginPage extends Component {
 
-  static navigationOptions = {
-    headerVisible: false,
-    header: null
-  };
-
   constructor(props) {
       super(props);
       this.state = {
@@ -59,8 +54,29 @@ class LoginPage extends Component {
   };
 
   componentDidMount() {
-    this.formErrorListener = EventRegister.addEventListener('ERROR_EVENT', (data) => {
+    this.formErrorListener = EventRegister.addEventListener('ERROR_LOGIN', data => {
+      let errors = '';
+      if (Array.isArray(data)) {
+        data.map(item => {
+          errors += item.value['xsd:string']+ '\n';
+          return true;
+        })
+      } else {
+        errors = data.value['xsd:string']
+      }
+
+      if (errors) {
+        this.setState({
+          errors: errors
+        });
+      }
     });
+
+    this.loginListener = EventRegister.addEventListener('LOGIN_RECIEVED', data => {
+      this.setState({
+        loading: false
+      })
+    })
 
     AsyncStorage.getItem('username', (err, result) => {
       AsyncStorage.removeItem('username')
@@ -69,10 +85,17 @@ class LoginPage extends Component {
 
   componentWillUnmount() {
     EventRegister.removeEventListener(this.formErrorListener);
+    EventRegister.removeEventListener(this.loginListener);
   };
 
   tryToLogin() {
-    this.props.login(this.state.phone, this.state.password);
+    if (!this.state.loading) {
+      this.props.login(this.state.phone, this.state.password);
+      this.setState({
+        loading: true,
+        errors: ''
+      })
+    }
   };
 
   render() {
@@ -84,8 +107,9 @@ class LoginPage extends Component {
               options={{
               mask: '+7 999 999 99 99'
               }}
-              value={this.state.email}
-              onChangeText={(text) => this.writing('email', text)}
+              value={this.state.phone}
+              onChangeText={(text) => this.writing('phone', text)}
+              onFocus={_ => {this.setState({errors: ''})}}
               style={styles.input}
               placeholder="+7 XXX XXX XX XX"
               placeholderTextColor={Colors.COLOR_BLACK_04}
@@ -102,13 +126,24 @@ class LoginPage extends Component {
               placeholderTextColor={Colors.COLOR_BLACK_04}
               textContentType="password"
               onChangeText={(text) => this.writing('password', text)}
+              onFocus={_ => {this.setState({errors: ''})}}
             />
           </View>
           <TouchableHighlight onPress={this.tryToLogin} underlayColor="transparent" style={styles.inputButton_wrapper}>
             <View style={[styles.inputButton]}>
-              <Text style={styles.inputText} onPress={() => {this.tryToLogin()}}>Войти</Text>
+              {
+                this.state.loading ?
+                <ActivityIndicator />
+                :
+                <Text style={styles.inputText} onPress={() => {this.tryToLogin()}}>Войти</Text>
+              }
             </View>
           </TouchableHighlight>
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>
+              {this.state.errors}
+            </Text>
+          </View>
         </View>
       )
   };
@@ -116,9 +151,9 @@ class LoginPage extends Component {
   // On user text typing
   writing(type, text){
     switch(type) {
-      case 'email':
+      case 'phone':
         this.setState({
-          email : text
+          phone : text
         });
       break;
       case 'password':
@@ -132,7 +167,7 @@ class LoginPage extends Component {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    login: (username, password) => login(username, password)
+    login: (username, password, checkStorage) => login(username, password, checkStorage)
   }, dispatch);
 }
 
