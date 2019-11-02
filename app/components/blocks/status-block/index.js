@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react';
 import {
     View,
     Text,
-    TouchableOpacity,
 } from 'react-native';
 
 import styles from './styles';
@@ -25,6 +24,7 @@ import {
 class StatusBlock extends PureComponent {
   constructor(props) {
     super(props);
+    //console.warn('PROPS', props)
     this.state = {
     }
   }
@@ -37,7 +37,7 @@ class StatusBlock extends PureComponent {
     return (
       <View>
         <Text style={styles[`${this.props.color}`]}>
-          {this.props.text}
+          {this.props.text ? this.props.text : ''}
         </Text>
       </View>
     )

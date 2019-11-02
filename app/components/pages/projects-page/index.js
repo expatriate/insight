@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     TouchableHighlight,
     ActivityIndicator,
+    FlatList
 } from 'react-native';
 
 import { bindActionCreators } from 'redux';
@@ -82,14 +83,14 @@ class ProjectsPage extends Component {
       }
 
       this.loadingRecieved = EventRegister.addEventListener('PROJECTS_LOADING_START', () => {
-        console.warn('PROJECTS_LOADING_START')
+        //console.warn('PROJECTS_LOADING_START')
         this.setState({
           loading: true
         })
       })
 
       this.projectsRecieved = EventRegister.addEventListener('PROJECTS_RECIEVED', () => {
-        console.warn('PROJECTS_RECIEVED')
+        //console.warn('PROJECTS_RECIEVED')
         this.setState({
           isFetching: false,
           loading: false
@@ -128,7 +129,7 @@ class ProjectsPage extends Component {
 
   	onRowDidOpen = (rowKey, rowMap) => {
   		console.log('This row opened', rowKey);
-      console.warn('OPEN', rowKey)
+      //console.warn('OPEN', rowKey)
   	}
 
   	onSwipeValueChange = (swipeData) => {
@@ -137,7 +138,7 @@ class ProjectsPage extends Component {
   	}
 
     goToMain(projectid) {
-      console.warn(projectid)
+      //console.warn(projectid)
       this.props.navigateToMainPage(projectid);
     }
 
@@ -157,17 +158,10 @@ class ProjectsPage extends Component {
     }
 
     renderCard(data, rowMap) {
-      this.rowSwipeAnimatedValues[`${data.item.key}`] = new Animated.Value(0);
-      const position= {
-        transform: [
-          {
-            translateX: 75
-          }
-        ]
-      };
+      let status = this.props.statuses.project_items.find(item => parseInt(item.name) === parseInt(data.item.status));
       return (
         <TouchableHighlight
-          onPress={ _ => this.goToMain(data.item.id)}//console.warn('You touched me') }
+          onPress={ _ => this.goToMain(data.item.id)}////console.warn('You touched me') }
           style={[styles.rowFront, this.state.openSelect ? position : {}]}
           underlayColor={'#AAA'}
         >
@@ -178,9 +172,17 @@ class ProjectsPage extends Component {
             <Text style={styles.title}>{data.item.name}</Text>
             </Text>
             <View style={{marginVertical: 0}}>
+            {
+              /*this.props.statuses.project_items.find(item => parseInt(item.name) === parseInt(data.item.status)).value ?
               <StatusBlock
                 text={this.props.statuses.project_items.find(item => parseInt(item.name) === parseInt(data.item.status)).value}
                 color={statusColor(data.item.status, true)} />
+                : null*/
+            }
+            {
+              <StatusBlock text={status.value} color={statusColor(data.item.status, true)} />
+            }
+
             </View>
           </View>
         </TouchableHighlight>
@@ -250,28 +252,15 @@ class ProjectsPage extends Component {
                   <ActivityIndicator />
                 </View>
                 :
-                <SwipeListView
-    						data={this.props.projects.items}
-                closeOnRowOpen={false}
-                ref={ref => this.swipelist}
-    						renderItem={(data, rowItem) => this.renderCard(data, rowItem)}
-                onRefresh={() => this.onRefresh()}
-                refreshing={this.state.isFetching}
-                ListEmptyComponent={this._listEmptyComponent}
-                disableRightSwipe={true}
-                disableLeftSwipe={true}
-    						renderHiddenItem={ (data, rowMap) => (
-                  <View style={styles.rowBack}>
-    							</View>
-    						)}
-    						leftOpenValue={75}
-    						rightOpenValue={-75}
-    						previewRowKey={'0'}
-    						previewOpenValue={-40}
-    						previewOpenDelay={3000}
-    						onRowDidOpen={this.onRowDidOpen}
-    						onSwipeValueChange={this.onSwipeValueChange}
-    					/>
+                <FlatList
+                  data={this.props.projects.items}
+                  closeOnRowOpen={false}
+                  ref={ref => this.swipelist}
+                  renderItem={(data, rowItem) => this.renderCard(data, rowItem)}
+                  onRefresh={() => this.onRefresh()}
+                  refreshing={this.state.isFetching}
+                  ListEmptyComponent={this._listEmptyComponent}
+                />
             }
 
               </View>

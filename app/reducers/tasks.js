@@ -15,7 +15,7 @@ const appState = {
 export default tasks = (state = appState, action) => {
     switch (action.type) {
       case types.TASKS_RECIEVED:
-      console.warn('TASKS_RECIEVED')
+      //console.warn('TASKS_RECIEVED')
         return {
           ...state,
           items: action.data.tasks,
@@ -24,7 +24,7 @@ export default tasks = (state = appState, action) => {
         }
       break;
       case types.TASK_VISITED:
-      console.warn('TASK_VISITED', action.data)
+      //console.warn('TASK_VISITED', action.data)
         return {
           ...state,
           items: state.items.map(item => {
@@ -39,7 +39,7 @@ export default tasks = (state = appState, action) => {
         }
       break;
       case types.TASKS_ADD_RECIEVED:
-      console.warn('TASKS_ADD_RECIEVED')
+      //console.warn('TASKS_ADD_RECIEVED')
         return {
           ...state,
           items: state.items.concat(action.data.tasks),

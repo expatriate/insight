@@ -8,7 +8,7 @@ const projectsState = {
 export default projects = (state = projectsState, action) => {
     switch (action.type) {
       case types.PROJECTS_RECIEVED:
-      console.warn( action.data)
+      //console.warn( action.data)
         return {
           ...state,
           items: action.data,

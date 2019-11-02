@@ -66,14 +66,14 @@ class CompaniesPage extends Component {
       }
 
       this.loadingRecieved = EventRegister.addEventListener('COMPANIES_LOADING_START', () => {
-        console.warn('COMPANIES_LOADING_START')
+        //console.warn('COMPANIES_LOADING_START')
         this.setState({
           loading: true
         })
       })
 
       this.companiesRecieved = EventRegister.addEventListener('COMPANIES_RECIEVED', () => {
-        console.warn('COMPANIES_RECIEVED')
+        //console.warn('COMPANIES_RECIEVED')
         this.setState({
           isFetching: false,
           loading: false
@@ -81,7 +81,7 @@ class CompaniesPage extends Component {
       })
 
       this.pushRecieved = EventRegister.addEventListener('PUSH_RECIEVED', (task) => {
-        console.warn('PUSH_RECIEVED', task);
+        //console.warn('PUSH_RECIEVED', task);
 
         this.props.navigateToDetail(task)
       })
@@ -118,7 +118,7 @@ class CompaniesPage extends Component {
 
   	onRowDidOpen = (rowKey, rowMap) => {
   		console.log('This row opened', rowKey);
-      console.warn('OPEN', rowKey)
+      //console.warn('OPEN', rowKey)
   	}
 
   	onSwipeValueChange = (swipeData) => {
@@ -162,7 +162,7 @@ class CompaniesPage extends Component {
       };
       return (
         <TouchableHighlight
-          onPress={ _ => this.goToProjects(data.item.id)}//console.warn('You touched me') }
+          onPress={ _ => this.goToProjects(data.item.id)}////console.warn('You touched me') }
           style={[styles.rowFront, this.state.openSelect ? position : {}]}
           underlayColor={'#AAA'}
         >

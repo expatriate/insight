@@ -22,6 +22,8 @@ export const TASK_VISITED = 'TASK_VISITED';
 
 export const TASK_RECIEVED = 'TASK_RECIEVED';
 
+export const USER_RECIEVED = 'USER_RECIEVED';
+
 // Companies
 export const COMPANIES_RECIEVED = 'COMPANIES_RECIEVED';
 

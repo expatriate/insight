@@ -9,7 +9,7 @@ import {
   ScrollView,
   Image,
   TextInput,
-  TouchableHighlight,
+  TouchableOpacity,
   Alert,
   KeyboardAvoidingView,
   StatusBar
@@ -58,11 +58,17 @@ class LoginPage extends Component {
       let errors = '';
       if (Array.isArray(data)) {
         data.map(item => {
-          errors += item.value['xsd:string']+ '\n';
+          errors += item.value.string+ '\n';
           return true;
         })
       } else {
-        errors = data.value['xsd:string']
+        if (data.message) {
+          errors = data.message
+        } else if (data.value && data.value.string) {
+          errors = data.value.string
+        } else {
+          errors = 'Непредвиденная ошибка. Попробуйте повторить позднее'
+        }
       }
 
       if (errors) {
@@ -129,7 +135,7 @@ class LoginPage extends Component {
               onFocus={_ => {this.setState({errors: ''})}}
             />
           </View>
-          <TouchableHighlight onPress={this.tryToLogin} underlayColor="transparent" style={styles.inputButton_wrapper}>
+          <TouchableOpacity onPress={this.tryToLogin} style={styles.inputButton_wrapper}>
             <View style={[styles.inputButton]}>
               {
                 this.state.loading ?
@@ -138,9 +144,9 @@ class LoginPage extends Component {
                 <Text style={styles.inputText} onPress={() => {this.tryToLogin()}}>Войти</Text>
               }
             </View>
-          </TouchableHighlight>
+          </TouchableOpacity>
           <View style={styles.errorContainer}>
-            <Text style={styles.errorText}>
+            <Text style={styles.errorText} numberOfLines={5}>
               {this.state.errors}
             </Text>
           </View>

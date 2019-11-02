@@ -1,9 +1,9 @@
 export default statusColor = (id, projects = false) => {
 
-  id = id ? id : 0;
+  id = id ? id.toString() : 0;
 
   // Определяем цвет статусов
-
+  //console.warn(id)
   switch (id) {
     case '0':
       if (projects)
@@ -37,6 +37,6 @@ export default statusColor = (id, projects = false) => {
       return 'RED_STATUS' // отклонена клиентом
     break;
     default:
-        return text;
+        return 'GRAY_STATUS';
   }
 };

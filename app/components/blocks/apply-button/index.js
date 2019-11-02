@@ -72,7 +72,7 @@ class ApplyButton extends PureComponent {
       applyText: '',
       visible: false
     }
-    console.warn(this.props.statuses)
+    //console.warn(this.props.statuses)
 
     if (this.props.user.isMaster && this.props.task.status === '4') {
       obj = {
@@ -106,7 +106,7 @@ class ApplyButton extends PureComponent {
     this.setState({
       ...obj
     }, () => {
-      console.warn(this.state)
+      //console.warn(this.state)
     })
   }
 

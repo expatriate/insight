@@ -58,7 +58,7 @@ export default StyleSheet.create({
     marginTop: 10
   },
   errorText: {
-    fontSize: responsiveFontSize(2.2),
+    fontSize: responsiveFontSize(1.8),
     color: Colors.COLOR_RED_04,
     textAlign: 'center'
   }

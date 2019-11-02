@@ -123,19 +123,19 @@ class EditPage extends Component {
       });
 
       //this.props.getImages(this.props.nav.routes[this.props.nav.index].params.task.id)
-      console.warn(this.props.nav.routes[this.props.nav.index].params.task)
+      //console.warn(this.props.nav.routes[this.props.nav.index].params.task)
     }
 
 
     this.townListener = EventRegister.addEventListener('TASK_TOWN_SELECTED', (item) => {
-      console.warn(item)
+      //console.warn(item)
       this.setState({
         task: {
           ...this.state.task,
           town_id: item.id
         }
       }, () => {
-        console.warn(this.state.task)
+        //console.warn(this.state.task)
       })
     });
 
@@ -174,7 +174,7 @@ class EditPage extends Component {
     })
 
     this.onImagePrepareToRemove = EventRegister.addEventListener('TOGGLE_IMAGE_TO_REMOVE', (image) => {
-      console.warn('IMAGE',image)
+      //console.warn('IMAGE',image)
       if (!this.state.imagesToRemove.length) {
         this.setState({
           imagesToRemove: [
@@ -353,11 +353,11 @@ class EditPage extends Component {
                     style={styles.textInput}
                     value={this.state.task.shop_title}
                     onChangeText={(text) => this.change('shop_title', text)}
-                    onSubmitEditing={(text) => console.warn(text)}/>
+                    onSubmitEditing={(text) => {}}/>
                 </View>
 
                 <Text style={styles.maintext}>
-                  Тип монтажа:&nbsp;
+                  Тип:&nbsp;
                 </Text>
                 <View style={styles.inputWrapper}>
                   <TextInput

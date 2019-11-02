@@ -74,14 +74,14 @@ class MainPage extends Component {
       }
 
       this.loadingRecieved = EventRegister.addEventListener('TASKS_LOADING_START', () => {
-        console.warn('TASKS_LOADING_START')
+        //console.warn('TASKS_LOADING_START')
         this.setState({
           loading: true
         })
       })
 
       this.tasksRecieved = EventRegister.addEventListener('TASKS_RECIEVED', () => {
-        console.warn('TASKS_RECIEVED')
+        //console.warn('TASKS_RECIEVED')
         this.setState({
           isFetching: false,
           loading: false
@@ -121,7 +121,7 @@ class MainPage extends Component {
 
   	onRowDidOpen = (rowKey, rowMap) => {
   		console.log('This row opened', rowKey);
-      console.warn('OPEN', rowKey)
+      //console.warn('OPEN', rowKey)
   	}
 
   	onSwipeValueChange = (swipeData) => {

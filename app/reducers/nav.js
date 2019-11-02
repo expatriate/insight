@@ -17,7 +17,7 @@ export default nav = (state = initialState, action) => {
       break;
     case types.REDIRECT_LOGIN:
       // Spectator goes to project first
-      //console.warn(action.data)
+      ////console.warn(action.data)
       if (action.data.status === '5') {
         nextState = RootNavigator.router.getStateForAction(
           NavigationActions.navigate({

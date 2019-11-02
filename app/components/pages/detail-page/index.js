@@ -102,7 +102,7 @@ class DetailPage extends Component {
           if (response.didCancel) {
           } else if (response.error) {
           } else {
-            console.warn(response)
+            //console.warn(response)
             this.setState({
               loadingImages: [
                 ...this.state.loadingImages,
@@ -118,7 +118,7 @@ class DetailPage extends Component {
           if (response.didCancel) {
           } else if (response.error) {
           } else {
-            console.warn(response)
+            //console.warn(response)
             this.setState({
               loadingImages: [
                 ...this.state.loadingImages,
@@ -218,7 +218,7 @@ class DetailPage extends Component {
       }
     })
     this.props.changeStatus(this.props.user.sessionid, this.state.task.id, status);
-    //console.warn(status)
+    ////console.warn(status)
   }
 
   saveTaskImages() {
@@ -316,11 +316,11 @@ class DetailPage extends Component {
                   <Text style={styles.sectext}>{this.state.task.shop_title}</Text>
                 </Text>
                 <Text style={styles.maintext}>
-                  Тип монтажа:&nbsp;
+                  Тип:&nbsp;
                   <Text style={styles.sectext}>{this.state.task.type}</Text>
                 </Text>
                 <Text style={styles.maintext}>
-                  Ответственный:&nbsp;
+                  Представитель:&nbsp;
                   <Text style={styles.sectext}>
                     {this.state.task.agent && this.state.task.agent.id ? this.state.task.agent.last_name + ' ' + this.state.task.agent.first_name : 'Не назначен' }
                   </Text>

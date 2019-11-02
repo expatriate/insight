@@ -152,7 +152,7 @@ class FilterPage extends Component {
                       </Svg>
                     }}
                     onValueChange={(value) => {
-                      console.warn(value);
+                      //console.warn(value);
                       this.setState({
                         filterTown: value,
                       })

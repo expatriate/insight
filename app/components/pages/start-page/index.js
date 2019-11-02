@@ -79,7 +79,7 @@ class StartPage extends Component {
   render() {
     return (
       <View style={styles.main}>
-        <Animatable.View style={styles.mainSvg} animation={'rotate'} direction={'reverse'} duration="13000" easing={'linear'}>
+        <Animatable.View style={styles.mainSvg} animation={'rotate'} direction={'reverse'} duration={13000} easing={'linear'}>
           <Svg width={viewportHeight+100} height={viewportHeight+100} viewBox="0 0 815 812">
             <Path fill={Colors.COLOR_DARK_RED}
             d="M815.956,812.956c-271.682,0-543.319,0-814.913,0c0-270.682,0-541.318,0-811.912

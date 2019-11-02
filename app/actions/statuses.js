@@ -1,8 +1,19 @@
 import * as types from '../actionTypes.js';
 import axios from 'axios';
-import xml2js from 'react-native-xml2js';
+import xmlParse from 'fast-xml-parser';
 
 import { EventRegister } from 'react-native-event-listeners';
+
+let options = {
+  ignoreAttributes : true,
+  ignoreNameSpace : true,
+  allowBooleanAttributes : false,
+  parseNodeValue : false,
+  parseAttributeValue : false,
+  trimValues: true,
+  parseTrueNumberOnly: false,
+};
+
 // Получение статусов
 export const getStatuses = () => {
   return dispatch => {
@@ -11,43 +22,36 @@ export const getStatuses = () => {
       `<soapenv:Envelope
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-        xmlns:soap="http://insight.mahaonweb.beget.tech/api/tasks/soap?ws=1">
+        xmlns:soap="https://insightapp.ru/api/tasks/soap?ws=1">
             <soapenv:Header/>
             <soapenv:Body>
               <soap:getTaskStatuses soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
             </soapenv:Body>
           </soapenv:Envelope>`;
 
-          axios.post('http://insight.mahaonweb.beget.tech/api/tasks/soap?ws=1',
+          axios.post('https://insightapp.ru/api/tasks/soap?ws=1',
             xmls,
             {
               headers:{
                 'Content-Type': 'text/xml',
              }
             }).then(res => {
-              var parser = new xml2js.Parser({
-                explicitRoot: false,
-                ignoreAttrs: true,
-                explicitArray: false
-              });
-              parser.parseString(res.data, (err, result) => {
-                if (err) {console.warn('THROW'); throw (err)}
+              var result = xmlParse.parse(res.data, options);
 
-                if(result['SOAP-ENV:Body']['SOAP-ENV:Fault']) {
-                  //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
-                } else {
-                  const data = result['SOAP-ENV:Body']['ns1:getTaskStatusesResponse'].return.item;
+              if(result['Envelope']['Body']['Fault']) {
+                //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
+              } else {
+                const data = result['Envelope']['Body']['getTaskStatusesResponse'].return.item;
 
-                  if (data.length) {
-                    dispatch({
-                      type: types.STATUSES_RECIEVED,
-                      data: data
-                    })
-                  }
+                if (data.length) {
+                  dispatch({
+                    type: types.STATUSES_RECIEVED,
+                    data: data
+                  })
                 }
-              });
+              }
            }).catch(err => {
-             console.warn('ERROR', err)
+             //console.warn('ERROR', err)
            });
   }
 }
@@ -63,43 +67,36 @@ export const getProjectStatuses = () => {
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xsd="http://www.w3.org/2001/XMLSchema"
         xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
-        xmlns:soap="http://insight.mahaonweb.beget.tech/api/project/soap?ws=1">
+        xmlns:soap="https://insightapp.ru/api/project/soap?ws=1">
          <soapenv:Header/>
          <soapenv:Body>
             <soap:getProjectStatuses soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"/>
          </soapenv:Body>
       </soapenv:Envelope>`;
 
-          axios.post('http://insight.mahaonweb.beget.tech/api/project/soap?ws=1',
+          axios.post('https://insightapp.ru/api/project/soap?ws=1',
             xmls,
             {
               headers:{
                 'Content-Type': 'text/xml',
              }
             }).then(res => {
-              var parser = new xml2js.Parser({
-                explicitRoot: false,
-                ignoreAttrs: true,
-                explicitArray: false
-              });
-              parser.parseString(res.data, (err, result) => {
-                if (err) {console.warn('THROW'); throw (err)}
 
-                if(result['SOAP-ENV:Body']['SOAP-ENV:Fault']) {
-                  //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
-                } else {
-                  const data = result['SOAP-ENV:Body']['ns1:getProjectStatusesResponse'].return.item;
+              var result = xmlParse.parse(res.data, options);
 
-                  if (data.length) {
-                    dispatch({
-                      type: types.PROJECT_STATUSES_RECIEVED,
-                      data: data
-                    })
-                  }
+              if(result['Envelope']['Body']['Fault']) {
+                //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
+              } else {
+                const data = result['Envelope']['Body']['getProjectStatusesResponse'].return.item;
+                if (data.length) {
+                  dispatch({
+                    type: types.PROJECT_STATUSES_RECIEVED,
+                    data: data
+                  })
                 }
-              });
+              }
            }).catch(err => {
-             console.warn('ERROR', err)
+             //console.warn('ERROR', err)
            });
   }
 }
