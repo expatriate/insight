@@ -1,5 +1,5 @@
 import {
-    StyleSheet
+    StyleSheet, Platform
 } from 'react-native';
 
 import { Colors } from '../../styles/colors';
@@ -14,9 +14,9 @@ export default StyleSheet.create({
   header: {
     backgroundColor: Colors.COLOR_DARK_RED,
     ...ifIphoneX({
-        paddingTop: 30,
+        paddingTop: Platform.OS === 'ios' ? 30 : 0
     }, {
-        paddingTop: 20
+        paddingTop: Platform.OS === 'ios' ? 20 : 0
     }),
     flexDirection: 'row',
     justifyContent: 'space-around',
@@ -33,7 +33,7 @@ export default StyleSheet.create({
     color: Colors.COLOR_WHITE,
     fontSize: responsiveFontSize(2.6),
     fontWeight: 'bold',
-    paddingVertical: 10
+    paddingVertical: 15
   },
   rowFront: {
     backgroundColor: Colors.COLOR_WHITE,
@@ -44,10 +44,11 @@ export default StyleSheet.create({
   },
   line: {
     flexDirection: 'row',
-    paddingVertical: 15,
+    paddingVertical: 10,
     borderBottomWidth: 1,
     borderColor: Colors.COLOR_BLACK_01,
-    marginTop: 10
+    alignItems: 'center',
+    marginTop: 10,
   },
   def: {
     width: '40%',
@@ -55,9 +56,28 @@ export default StyleSheet.create({
     fontSize: responsiveFontSize(2)
   },
   picker: {
-    width: '60%',
-    justifyContent: 'flex-end',
-    textAlign: 'right',
+    flex: 1
+  },
+
+  inputIOS: {
+    fontSize: responsiveFontSize(2),
+    paddingVertical: 12,
+    paddingHorizontal: 10,
+    borderWidth: 1,
+    borderColor: 'gray',
+    borderRadius: 4,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
+  },
+  inputAndroid: {
+    fontSize: responsiveFontSize(2),
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderWidth: 0.5,
+    borderColor: 'purple',
+    borderRadius: 8,
+    color: 'black',
+    paddingRight: 30, // to ensure the text is never behind the icon
   },
 
   bottom: {

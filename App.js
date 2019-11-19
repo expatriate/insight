@@ -14,7 +14,6 @@ import {
   Alert
 } from 'react-native'
 
-//import PushNotification from 'react-native-push-notification';
 
 import {
   StatusBar,
@@ -25,13 +24,13 @@ import {
   createStackNavigator,
   HeaderBackButton
 } from "react-navigation";
-//import Geocoder from 'react-native-geocoding-simple';
+
 import {
   createReduxContainer,
   createReactNavigationReduxMiddleware,
   createNavigationReducer,
 } from 'react-navigation-redux-helpers';
-//axios.defaults.baseURL = 'http://api.myteam.pro/v1/';
+
 
 const navReducer = createNavigationReducer(RootNavigator);
 const appReducer = combineReducers({
@@ -60,8 +59,6 @@ const store = createStore(
 export default class Root extends Component {
 
   componentDidMount() {
-
-    //notificationService(this._onRegistered, this._onLocalNotification)
 
     BackHandler.addEventListener("hardwareBackPress", this.onBackPress);
   }

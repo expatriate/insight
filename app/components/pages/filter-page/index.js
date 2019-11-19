@@ -144,16 +144,16 @@ class FilterPage extends Component {
                         textAlign:'right',
                         paddingRight: 30,
                       },
-                      inputIOS:{
-                        paddingRight: 30,
-                        textAlign:'right',
-                        fontSize: responsiveFontSize(2),
+                      inputIOS: {
+                        ...styles.inputIOS,
                       },
-                      inputAndroid:{
-                        paddingRight: 30,
-                        textAlign:'right',
-                        fontSize: responsiveFontSize(2),
-                      }
+                      inputAndroid: {
+                        ...styles.inputAndroid
+                      },
+                      iconContainer: {
+                        top: 20,
+                        right: 10,
+                      },
                     }}
                     Icon={() => {
                       return <Svg width={18} height={18} viewBox={'0 0 292.362 292.362'}>
@@ -191,16 +191,16 @@ class FilterPage extends Component {
                         textAlign:'right',
                         paddingRight: 30,
                       },
-                      inputIOS:{
-                        paddingRight: 30,
-                        textAlign:'right',
-                        fontSize: responsiveFontSize(2),
+                      inputIOS: {
+                        ...styles.inputIOS,
                       },
-                      inputAndroid:{
-                        paddingRight: 30,
-                        textAlign:'right',
-                        fontSize: responsiveFontSize(2),
-                      }
+                      inputAndroid: {
+                        ...styles.inputAndroid
+                      },
+                      iconContainer: {
+                        top: 20,
+                        right: 10,
+                      },
                     }}
                     Icon={() => {
                       return <Svg width={18} height={18} viewBox={'0 0 292.362 292.362'}>

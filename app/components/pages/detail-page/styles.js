@@ -11,9 +11,9 @@ export default StyleSheet.create({
   header: {
     backgroundColor: Colors.COLOR_DARK_RED,
     ...ifIphoneX({
-        paddingTop: 30,
+        paddingTop: Platform.OS === 'ios' ? 30 : 0
     }, {
-        paddingTop: 20
+        paddingTop: Platform.OS === 'ios' ? 20 : 0
     }),
     flexDirection: 'row',
     alignItems: 'center'

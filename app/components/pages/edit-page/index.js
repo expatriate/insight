@@ -57,6 +57,8 @@ import CheckTownModal from '../../modals/check-town-modal';
 import CheckAgentModal from '../../modals/check-agent-modal';
 import CheckStatusModal from '../../modals/check-status-modal';
 
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+
 import styles from './styles';
 import baseStyles from '../../styles/base.js';
 import formsStyles from '../../styles/forms.js';
@@ -259,7 +261,7 @@ class EditPage extends Component {
 
     return (
       this.state.loaded ?
-          <KeyboardAvoidingView style={[baseStyles.container, styles.taskContainer]} behavior="padding" enabled>
+          <ScrollView style={[baseStyles.container, styles.taskContainer]}>
             <View style={styles.header}>
               <TouchableOpacity style={styles.headButton} onPress={() => {this.props.navigateBack()}}>
                 <Text style={styles.headButtonText}>
@@ -281,7 +283,7 @@ class EditPage extends Component {
                 </Text>
               </TouchableOpacity>
             </View>
-            <ScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={{paddingBottom: 40}}>
+            <KeyboardAwareScrollView keyboardShouldPersistTaps={'handled'} contentContainerStyle={{paddingBottom: 40}}>
               <View style={styles.card}>
                 <View style={styles.inputWrapper}>
                   <TextInput
@@ -482,8 +484,8 @@ class EditPage extends Component {
                   />
                 </View>
               }
-            </ScrollView>
-          </KeyboardAvoidingView>
+            </KeyboardAwareScrollView>
+          </ScrollView>
         :
         <LinearGradient style={baseStyles.contentAtCenter} colors={['#31a3b7', '#3dccc6']}>
           <ActivityIndicator />
