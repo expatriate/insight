@@ -7,6 +7,10 @@ import {
 
 import { EventRegister } from 'react-native-event-listeners';
 
+const CancelToken = axios.CancelToken;
+
+let cancel = undefined;
+
 let options = {
   ignoreAttributes : true,
   ignoreNameSpace : true,
@@ -26,9 +30,10 @@ export const filterTasks = (filter) => {
   }
 }
 
-export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
+export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0, firstload = false) => {
   return dispatch => {
 
+    console.warn(filter)
     if (!offset) {
       EventRegister.emit('TASKS_LOADING_START');
     }
@@ -43,8 +48,8 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
             <soap:getAllTasks soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
                <sessionKey xsi:type="xsd:anyType">${sessionid}</sessionKey>
                <filter xsi:type="soap:app.modules.api.models.TaskFilter">
-                ${filter && filter.town ? `<town_id xsi:type="xsd:int">${filter.town}</town_id>` : ``}
-                ${filter && filter.status ? `<status xsi:type="xsd:int">${filter.status}</status>` : ``}
+                ${filter && filter.town && filter.town.toString().length ? `<town_id xsi:type="xsd:int">${filter.town}</town_id>` : ``}
+                ${filter && filter.status && filter.status.toString().length ? `<status xsi:type="xsd:int">${filter.status}</status>` : ``}
                 ${filter && filter.project_id ? `<project_id xsi:type="xsd:int">${filter.project_id}</project_id>` : ``}
                </filter>
                <limit xsi:type="xsd:int">10</limit>
@@ -53,22 +58,34 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
          </soapenv:Body>
        </soapenv:Envelope>`;
 
+     if (cancel !== undefined) {
+       cancel();
+     }
+
+     firstload && dispatch({
+       type: types.TASKS_LOADING
+     });
+
     axios.post('https://insightapp.ru/api/spectator/soap?ws=1',
       xmls,
       {
         headers:{
           'Content-Type': 'text/xml',
-       }
+       },
+       cancelToken: new CancelToken(
+         function executor(c){
+           cancel = c;
+         })
       }).then(res => {
         var result = xmlParse.parse(res.data, options);
 
         if(result['Envelope']['Body']['Fault']) {
           //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
         } else {
-          const count = result['Envelope']['Body']['getAllTasksResponse'].return.item[0].value;
-          const data = result['Envelope']['Body']['getAllTasksResponse'].return.item[1].value.item;
+          let count = result['Envelope']['Body']['getAllTasksResponse'].return.item[0].value;
+          let data = result['Envelope']['Body']['getAllTasksResponse'].return.item[1].value.item;
           //console.warn('COUNT1',count)
-          //console.warn('DATA1', count, offset, data)
+          console.warn('DATA1', count, offset, data)
 
           if (typeof data === 'object' && !Array.isArray(data) && data.id) {
             data = [data];
@@ -76,6 +93,8 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
           if (data === undefined) {
             data = []
           }
+
+          console.warn('DATA SPECTATOR', JSON.stringify(xmls, 0 , 2))
           if (offset === 0) {
             dispatch({
               type: types.TASKS_RECIEVED,
@@ -86,7 +105,7 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
                     key: item.id + '_task'
                   }
                 }) : [],
-                count: count
+                count: parseInt(count)
               }
             })
             EventRegister.emit('TASKS_RECIEVED');
@@ -103,7 +122,7 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
                     key: item.id + '_task'
                   }
                 }) : [],
-                offset: offset
+                offset: parseInt(offset)
               }
             })
             EventRegister.emit('TASKS_ADD_RECIEVED');
@@ -116,10 +135,12 @@ export const getAllSpectatorTasks = (sessionid, filter = false, offset = 0) => {
 }
 
 
-export const getAllTasks = (sessionid, filter = false, offset = 0) => {
+export const getAllTasks = (sessionid, filter = false, offset = 0, firstload = false) => {
   return dispatch => {
 
-    if (!offset) {
+    //console.warn(sessionid, filter)
+
+    if (!offset || offset === 0) {
       EventRegister.emit('TASKS_LOADING_START');
     }
     let xmls=
@@ -133,8 +154,9 @@ export const getAllTasks = (sessionid, filter = false, offset = 0) => {
             <soap:getAllTasks soapenv:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/">
                <sessionKey xsi:type="xsd:anyType">${sessionid}</sessionKey>
                <filter xsi:type="soap:app.modules.api.models.TaskFilter">
-                ${filter && filter.town ? `<town_id xsi:type="xsd:int">${filter.town}</town_id>` : ``}
-                ${filter && filter.status ? `<status xsi:type="xsd:int">${filter.status}</status>` : ``}
+                ${filter && filter.project_id && filter.project_id.toString().length ? `<project_id xsi:type="xsd:int">${filter.project_id}</project_id>` : ``}
+                ${filter && filter.town && filter.town.toString().length ? `<town_id xsi:type="xsd:int">${filter.town}</town_id>` : ``}
+                ${filter && filter.status && filter.status.toString().length ? `<status xsi:type="xsd:int">${filter.status}</status>` : ``}
                </filter>
                <limit xsi:type="xsd:int">10</limit>
                <offset xsi:type="xsd:int">${offset}</offset>
@@ -142,12 +164,26 @@ export const getAllTasks = (sessionid, filter = false, offset = 0) => {
          </soapenv:Body>
        </soapenv:Envelope>`;
 
+       //console.warn(JSON.stringify(xmls, 0 , 2))
+
+    if (cancel !== undefined) {
+      cancel();
+    }
+
+    firstload && dispatch({
+      type: types.TASKS_LOADING
+    });
+
     axios.post('https://insightapp.ru/api/tasks/soap?ws=1',
       xmls,
       {
         headers:{
           'Content-Type': 'text/xml',
-       }
+        },
+        cancelToken: new CancelToken(
+          function executor(c){
+            cancel = c;
+          })
       }).then(res => {
 
         var result = xmlParse.parse(res.data, options);
@@ -155,17 +191,19 @@ export const getAllTasks = (sessionid, filter = false, offset = 0) => {
         if(result['Envelope']['Body']['Fault']) {
           //EventRegister.emit('ERROR_LOGIN', result['SOAP-ENV:Body'][0]['SOAP-ENV:Fault'][0].detail[0].item[0]);
         } else {
-          const count = result['Envelope']['Body']['getAllTasksResponse'].return.item[0].value;
-          const data = result['Envelope']['Body']['getAllTasksResponse'].return.item[1].value.item;
+          let count = result['Envelope']['Body']['getAllTasksResponse'].return.item[0].value;
+          let data = result['Envelope']['Body']['getAllTasksResponse'].return.item[1].value.item;
           //console.warn('COUNT1',count)
-          //console.warn('DATA1', count, offset, data)
 
+          //console.warn('DATA0', count, offset, data)
           if (typeof data === 'object' && !Array.isArray(data) && data.id) {
             data = [data];
           }
-          if (data === undefined) {
+          if (typeof data === 'undefined') {
             data = []
           }
+
+          //console.warn('DATA1', count, offset, data.length)
           if (offset === 0) {
             dispatch({
               type: types.TASKS_RECIEVED,
@@ -176,10 +214,11 @@ export const getAllTasks = (sessionid, filter = false, offset = 0) => {
                     key: item.id + '_task'
                   }
                 }) : [],
-                count: count
+                count: parseInt(count)
               }
             })
             EventRegister.emit('TASKS_RECIEVED');
+            console.warn(JSON.stringify(data, 0 , 2))
           }
 
           if (offset > 0) {
@@ -200,7 +239,7 @@ export const getAllTasks = (sessionid, filter = false, offset = 0) => {
           }
         }
      }).catch(err => {
-       //console.warn('ERROR', err)
+       console.warn('ERROR', err)
      });
   }
 }

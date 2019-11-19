@@ -23,6 +23,7 @@ import {
   getUserProjects,
   getAllProjects,
   getAllSpectatorProjects,
+  setProject
 } from '../../../actions';
 
 import Svg, {
@@ -60,16 +61,16 @@ class ProjectsPage extends Component {
 
       if (this.props.nav.routes[this.props.nav.index].params && this.props.nav.routes[this.props.nav.index].params.companyid) {
 
-
-        if (this.props.nav.routes[this.props.nav.index].params.companyid !== 'SPECTATOR') {
+        if (!this.props.user.isSpectator) {
+        //if (this.props.nav.routes[this.props.nav.index].params.companyid !== 'SPECTATOR') {
           this.setState({
             companyid: this.props.nav.routes[this.props.nav.index].params.companyid,
             loading: true
           }, () => {
             if (this.props.user.isAdmin) {
-              this.props.getAllProjects(this.state.companyid)
+              this.props.getAllProjects(this.state.companyid, true)
             } else {
-              this.props.getUserProjects(this.props.user.sessionid, this.state.companyid)
+              this.props.getUserProjects(this.props.user.sessionid, this.state.companyid, true)
             }
           });
         } else {
@@ -77,7 +78,7 @@ class ProjectsPage extends Component {
             companyid: this.props.nav.routes[this.props.nav.index].params.companyid,
             loading: true
           }, () => {
-            this.props.getAllSpectatorProjects(this.props.user.sessionid)
+            this.props.getAllSpectatorProjects(this.props.user.sessionid, true)
           });
         }
       }
@@ -128,7 +129,7 @@ class ProjectsPage extends Component {
   	}
 
   	onRowDidOpen = (rowKey, rowMap) => {
-  		console.log('This row opened', rowKey);
+  		//console.log('This row opened', rowKey);
       //console.warn('OPEN', rowKey)
   	}
 
@@ -138,7 +139,7 @@ class ProjectsPage extends Component {
   	}
 
     goToMain(projectid) {
-      //console.warn(projectid)
+      this.props.setProject(projectid);
       this.props.navigateToMainPage(projectid);
     }
 
@@ -276,9 +277,10 @@ class ProjectsPage extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
       navigateToMainPage: (projectid) => navigateToMainPage(projectid),
-      getUserProjects: (sessionid, companyid) => getUserProjects(sessionid, companyid),
-      getAllProjects: (companyid) => getAllProjects(companyid),
-      getAllSpectatorProjects: (sessionid) => getAllSpectatorProjects(sessionid),
+      getUserProjects: (sessionid, companyid, firsttime) => getUserProjects(sessionid, companyid, firsttime),
+      getAllProjects: (companyid, firsttime) => getAllProjects(companyid, firsttime),
+      getAllSpectatorProjects: (sessionid, firsttime) => getAllSpectatorProjects(sessionid, firsttime),
+      setProject: (projectid) => setProject(projectid),
       navigateBack: navigateBack
     }, dispatch);
 }

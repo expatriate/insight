@@ -23,11 +23,13 @@ import {
   getUserProjects,
   getAllProjects,
   getAllSpectatorProjects,
+  setProject,
 } from '../actions/projects.js';
 
 import {
   getUserCompanies,
-  getAllCompanies
+  getAllCompanies,
+  setCompany,
 } from '../actions/companies.js';
 
 import {
@@ -68,9 +70,11 @@ export {
   getUserProjects,
   getAllProjects,
   getAllSpectatorProjects,
+  setProject,
 
   getUserCompanies,
   getAllCompanies,
+  setCompany,
 
   getStatuses,
   getProjectStatuses,

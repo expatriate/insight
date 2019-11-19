@@ -2,7 +2,8 @@ import * as types from '../actionTypes.js';
 
 const companiesState = {
   items: [],
-  loaded: false
+  loaded: false,
+  selectedCompany: null
 };
 
 export default companies = (state = companiesState, action) => {
@@ -12,6 +13,12 @@ export default companies = (state = companiesState, action) => {
           ...state,
           items: action.data,
           loaded: true,
+        }
+      break;
+      case types.COMPANY_SELECTED:
+        return {
+          ...state,
+          selectedCompany: action.data
         }
       break;
       default:

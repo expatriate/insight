@@ -60,21 +60,31 @@ class MainPage extends Component {
       //if () TODO if status == admin => get task masters
 
       if (this.props.nav.routes[this.props.nav.index].params && this.props.nav.routes[this.props.nav.index].params.projectid) {
+
         this.setState({
           projectid: this.props.nav.routes[this.props.nav.index].params.projectid,
           loading: false
         }, () => {
+
           if (!this.props.user.isSpectator) {
-            this.props.getAllTasks(this.props.user.sessionid, false, 0)
+            this.props.getAllTasks(this.props.user.sessionid, {
+              town: this.props.tasks.filter.town,
+              project_id: this.props.projects.selectedProject,
+              status: this.props.tasks.filter.status,
+            }, 0, true)
           } else {
-            this.props.getAllSpectatorTasks(this.props.user.sessionid, {project_id: this.props.nav.routes[this.props.nav.index].params.projectid}, 0)
+            this.props.getAllSpectatorTasks(this.props.user.sessionid, {
+              project_id: this.props.projects.selectedProject,
+              town: this.props.tasks.filter.town,
+              status: this.props.tasks.filter.status,
+            }, 0, true)
           }
         });
         //this.props.getImages(this.props.nav.routes[this.props.nav.index].params.task.id)
       }
 
       this.loadingRecieved = EventRegister.addEventListener('TASKS_LOADING_START', () => {
-        //console.warn('TASKS_LOADING_START')
+        console.warn('TASKS_LOADING_START')
         this.setState({
           loading: true
         })
@@ -88,12 +98,18 @@ class MainPage extends Component {
         })
       })
 
-      this.tasksRecieved = EventRegister.addEventListener('TASKS_ADD_RECIEVED', () => {
+      this.tasksAddRecieved = EventRegister.addEventListener('TASKS_ADD_RECIEVED', () => {
         this.setState({
           loadingMore: false,
           loading: false
         })
       })
+    }
+
+    componentWillUnmount() {
+      EventRegister.removeEventListener(this.tasksRecieved);
+      EventRegister.removeEventListener(this.tasksAddRecieved);
+      EventRegister.removeEventListener(this.loadingRecieved);
     }
 
     closeRow(rowMap, rowKey) {
@@ -120,7 +136,7 @@ class MainPage extends Component {
   	}
 
   	onRowDidOpen = (rowKey, rowMap) => {
-  		console.log('This row opened', rowKey);
+  		//console.log('This row opened', rowKey);
       //console.warn('OPEN', rowKey)
   	}
 
@@ -172,8 +188,6 @@ class MainPage extends Component {
                   </View>
                 : null
               }
-              <View>
-              </View>
               <Text style={[styles.title, data.item.isVisited === 'false' ? {fontWeight: 'bold'} : {}]}>{data.item.name}</Text>
             </View>
             <Text style={styles.number}>№ {data.item.id}</Text>
@@ -210,7 +224,10 @@ class MainPage extends Component {
 
     fetchData() {
       if (!this.props.user.isSpectator) {
-        this.props.getAllTasks(this.props.user.sessionid, this.props.tasks.filter, 0)
+        this.props.getAllTasks(this.props.user.sessionid, {
+          ...this.props.tasks.filter,
+          project_id: this.props.projects.selectedProject
+        }, 0)
       } else {
         this.props.getAllSpectatorTasks(this.props.user.sessionid, {
           ...this.props.tasks.filter,
@@ -226,7 +243,10 @@ class MainPage extends Component {
           },
           () => {
             if (!this.props.user.isSpectator) {
-              this.props.getAllTasks(this.props.user.sessionid, this.props.tasks.filter, this.props.tasks.items.length);
+              this.props.getAllTasks(this.props.user.sessionid, {
+                ...this.props.tasks.filter,
+                project_id: this.props.projects.selectedProject
+              }, this.props.tasks.items.length);
             } else {
               this.props.getAllSpectatorTasks(this.props.user.sessionid, {
                 ...this.props.tasks.filter,
@@ -313,7 +333,7 @@ class MainPage extends Component {
             </View>
             <View style={styles.swipeList}>
             {
-              this.state.loading && !this.state.isFetching && this.state.loadingMore || !this.props.tasks.loaded ?
+              this.state.loading && !this.state.isFetching && this.state.loadingMore || this.state.loading && !this.state.isFetching && !this.state.loadingMore || !this.props.tasks.loaded ?
                 <View style={{padding: 40}}>
                   <ActivityIndicator />
                 </View>
@@ -396,8 +416,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
       navigateToDetail: (task) => navigateToDetail(task),
       navigateToFilter: navigateToFilter,
-      getAllTasks: (sessionid, filter, offset) => getAllTasks(sessionid, filter, offset),
-      getAllSpectatorTasks: (sessionid, filter, offset) => getAllSpectatorTasks(sessionid, filter, offset),
+      getAllTasks: (sessionid, filter, offset, firsttime) => getAllTasks(sessionid, filter, offset, firsttime),
+      getAllSpectatorTasks: (sessionid, filter, offset, firsttime) => getAllSpectatorTasks(sessionid, filter, offset, firsttime),
       changeStatus: (sessionid, id, status) => changeStatus(sessionid, id, status),
       navigateBack: navigateBack
     }, dispatch);
@@ -410,6 +430,7 @@ export default connect(
       app: state.app,
       nav: state.nav,
       tasks: state.tasks,
+      projects: state.projects,
       statuses: state.statuses,
       towns: state.towns
     }

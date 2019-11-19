@@ -77,6 +77,14 @@ export const getAllCompanies = () => {
   }
 }
 
+export const setCompany = (companyid) => {
+  return dispatch => {
+    dispatch({
+      type: types.COMPANY_SELECTED,
+      data: companyid
+    });
+  }
+}
 
 export const getUserCompanies = (sessionid) => {
   return dispatch => {

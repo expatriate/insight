@@ -23,6 +23,7 @@ import {
   getTaskMasters,
   getUserCompanies,
   getAgents,
+  setCompany
 } from '../../../actions';
 
 import Svg, {
@@ -127,6 +128,7 @@ class CompaniesPage extends Component {
   	}
 
     goToProjects(companyid) {
+      this.props.setCompany(companyid);
       this.props.navigateToProjects(companyid);
     }
 
@@ -264,6 +266,7 @@ function mapDispatchToProps(dispatch) {
       navigateToDetail: (task) => navigateToDetail(task),
       getTaskMasters: (sessionid) => getTaskMasters(sessionid),
       getAgents: (sessionid) => getAgents(sessionid),
+      setCompany: (companyid) => setCompany(companyid)
     }, dispatch);
 }
 

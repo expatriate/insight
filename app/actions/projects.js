@@ -6,6 +6,10 @@ import {
   Alert
 } from 'react-native';
 
+const CancelToken = axios.CancelToken;
+
+let cancel = undefined;
+
 let options = {
   ignoreAttributes : true,
   ignoreNameSpace : true,
@@ -16,7 +20,7 @@ let options = {
   parseTrueNumberOnly: false,
 };
 
-export const getAllSpectatorProjects = (sessionid) => {
+export const getAllSpectatorProjects = (sessionid, firstload = false) => {
   EventRegister.emit('PROJECTS_LOADING_START');
   return dispatch => {
     let xmls=
@@ -33,12 +37,24 @@ export const getAllSpectatorProjects = (sessionid) => {
          </soapenv:Body>
       </soapenv:Envelope>`;
 
+    if (cancel !== undefined) {
+      cancel();
+    }
+
+    firstload && dispatch({
+      type: types.PROJECTS_LOADING
+    });
+
     axios.post('https://insightapp.ru/api/spectator/soap?ws=1',
       xmls,
       {
         headers:{
           'Content-Type': 'text/xml',
-       }
+       },
+       cancelToken: new CancelToken(
+         function executor(c){
+           cancel = c;
+         })
       }).then(res => {
 
         var result = xmlParse.parse(res.data, options);
@@ -69,7 +85,16 @@ export const getAllSpectatorProjects = (sessionid) => {
   }
 }
 
-export const getUserProjects = (sessionid, company_id) => {
+export const setProject = (projectid) => {
+  return dispatch => {
+    dispatch({
+      type: types.PROJECT_SELECTED,
+      data: projectid
+    });
+  }
+}
+
+export const getUserProjects = (sessionid, company_id, firstload = false) => {
   return dispatch => {
     EventRegister.emit('PROJECTS_LOADING_START');
     let xmls=
@@ -87,12 +112,24 @@ export const getUserProjects = (sessionid, company_id) => {
        </soapenv:Body>
     </soapenv:Envelope>`;
 
+    if (cancel !== undefined) {
+      cancel();
+    }
+
+    firstload && dispatch({
+      type: types.PROJECTS_LOADING
+    });
+
     axios.post('https://insightapp.ru/api/project/soap?ws=1',
       xmls,
       {
         headers:{
           'Content-Type': 'text/xml',
-       }
+       },
+       cancelToken: new CancelToken(
+         function executor(c){
+           cancel = c;
+         })
       }).then(res => {
         var result = xmlParse.parse(res.data, options);
         if(result['Envelope']['Body']['Fault']) {
@@ -124,7 +161,7 @@ export const getUserProjects = (sessionid, company_id) => {
   }
 }
 
-export const getAllProjects = (company_id) => {
+export const getAllProjects = (company_id, firstload = false) => {
   EventRegister.emit('PROJECTS_LOADING_START');
   return dispatch => {
     let xmls=
@@ -141,12 +178,24 @@ export const getAllProjects = (company_id) => {
        </soapenv:Body>
     </soapenv:Envelope>`;
 
+    if (cancel !== undefined) {
+      cancel();
+    }
+
+    firstload && dispatch({
+      type: types.PROJECTS_LOADING
+    });
+
     axios.post('https://insightapp.ru/api/project/soap?ws=1',
       xmls,
       {
         headers:{
           'Content-Type': 'text/xml',
-       }
+       },
+       cancelToken: new CancelToken(
+         function executor(c){
+           cancel = c;
+         })
       }).then(res => {
         var result = xmlParse.parse(res.data, options);
         if(result['Envelope']['Body']['Fault']) {

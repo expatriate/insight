@@ -100,6 +100,7 @@ export default StyleSheet.create({
   title: {
     fontSize: responsiveFontSize(2.4),
     marginBottom: 4,
+    paddingRight: 20,
     color: Colors.COLOR_BLACK,
   },
   round: {

@@ -30,6 +30,7 @@ import {
   navigateBack,
   filterTasks,
   getAllTasks,
+  getAllSpectatorTasks,
 } from '../../../actions';
 
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -82,17 +83,30 @@ class FilterPage extends Component {
         filterTown: null
       });
 
-      //if (!this.props.user.isSpectator) {
-      this.props.getAllTasks(this.props.user.sessionid, false, 0)
-      //} else {
-      //  this.props.getAllSpectatorTasks(this.props.user.sessionid, , 0)
-      //}
+      if (!this.props.user.isSpectator) {
+        this.props.getAllTasks(this.props.user.sessionid, {project_id: this.props.projects.selectedProject}, 0)
+      } else {
+        this.props.getAllSpectatorTasks(this.props.user.sessionid, {project_id: this.props.projects.selectedProject}, 0)
+      }
+
       this.props.navigateBack();
     }
 
     applyFilter() {
       this.props.filterTasks({town: this.state.filterTown, status: this.state.filterStatus});
-      this.props.getAllTasks(this.props.user.sessionid, {town: this.state.filterTown, status: this.state.filterStatus}, 0);
+      if (!this.props.user.isSpectator) {
+        this.props.getAllTasks(this.props.user.sessionid, {
+          town: this.state.filterTown,
+          project_id: this.props.projects.selectedProject,
+          status: this.state.filterStatus
+        }, 0)
+      } else {
+        this.props.getAllSpectatorTasks(this.props.user.sessionid, {
+          project_id: this.props.projects.selectedProject,
+          town: this.state.filterTown,
+          status: this.state.filterStatus
+        }, 0)
+      }
       this.props.navigateBack();
     }
 
@@ -152,7 +166,6 @@ class FilterPage extends Component {
                       </Svg>
                     }}
                     onValueChange={(value) => {
-                      //console.warn(value);
                       this.setState({
                         filterTown: value,
                       })
@@ -230,7 +243,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
       navigateBack: navigateBack,
       filterTasks: (filter) => filterTasks(filter),
-      getAllTasks: (sessionid, filter, offset) => getAllTasks(sessionid, filter, offset)
+      getAllTasks: (sessionid, filter, offset) => getAllTasks(sessionid, filter, offset),
+      getAllSpectatorTasks: (sessionid, filter, offset) => getAllSpectatorTasks(sessionid, filter, offset),
     }, dispatch);
 }
 
@@ -240,8 +254,10 @@ export default connect(
       user: state.user,
       app: state.app,
       statuses: state.statuses,
+      projects: state.projects,
       towns: state.towns,
       tasks: state.tasks,
+      companies: state.companies
     }
   }, mapDispatchToProps
 )(FilterPage);

@@ -38,7 +38,7 @@ saveAuth = async (phone, password, sessionid = '') => {
       },
 
       onNotification: function(notification) {
-          ////console.warn( 'NOTIFICATION:', notification );
+          console.warn( 'NOTIFICATION:', JSON.stringify(notification, 0 , 2));
           Alert.alert(
             notification.message.title,
             notification.message.body,

@@ -23,6 +23,12 @@ export default tasks = (state = appState, action) => {
           loaded: true,
         }
       break;
+      case types.TASKS_LOADING:
+        return {
+          ...state,
+          loaded: false
+        }
+      break;
       case types.TASK_VISITED:
       //console.warn('TASK_VISITED', action.data)
         return {
