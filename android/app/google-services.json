@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "568135003489",
+    "firebase_url": "https://insight-341ba.firebaseio.com",
+    "project_id": "insight-341ba",
+    "storage_bucket": "insight-341ba.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:568135003489:android:390cd4be8ff28645326920",
+        "android_client_info": {
+          "package_name": "com.insightreactapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "568135003489-99vge4ft1gq5n0uqj68m4udp9kpq3lk1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.insightreactapp",
+            "certificate_hash": "d5c210db743b0598191ae6664c2dcc202455dad0"
+          }
+        },
+        {
+          "client_id": "568135003489-kj382nvv8l5qp94bj4tb5ikd4rumrc5m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqll4ZH-kWhOyOT9DTuP-uYUx5BxkdlHc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "568135003489-kj382nvv8l5qp94bj4tb5ikd4rumrc5m.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "568135003489-4qcnud4imp3eolni041d330tu9rtpho4.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "InsightReactApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

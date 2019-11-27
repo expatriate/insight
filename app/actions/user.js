@@ -23,13 +23,45 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { EventRegister } from 'react-native-event-listeners';
 
 import PushNotification from 'react-native-push-notification';
+import firebase from 'react-native-firebase';
 
 
+getToken = async (sessionid) => {
+  let fcmToken = await AsyncStorage.getItem('fcmToken');
+  console.warn("before fcmToken: ", fcmToken);
+  //sendPhoneToken(sessionid, fcmToken)
+  if (!fcmToken) {
+    fcmToken = await firebase.messaging().getToken();
+    if (fcmToken) {
+      console.warn("after fcmToken: ", fcmToken);
+      await AsyncStorage.setItem('fcmToken', fcmToken);
+      sendPhoneToken(sessionid, fcmToken)
+    }
+  }
+}
+requestPermission = async (sessionid) => {
+  firebase.messaging().requestPermission()
+    .then(() => {
+      this.getToken(sessionid);
+    })
+    .catch(error => {
+      console.warn('permission rejected');
+    });
+}
+checkPermission = async (sessionid) => {
+  firebase.messaging().hasPermission()
+    .then(enabled => {
+      if (enabled) {
+        console.warn("Permission granted");
+        this.getToken(sessionid);
+      } else {
+        console.warn("Request Permission");
+        this.requestPermission(sessionid);
+      }
+    });
+}
 
-
-// Запись данных во внутренный стор телефона
-saveAuth = async (phone, password, sessionid = '') => {
-
+configureIOSNotifications = (sessionid) => {
   PushNotification.configure({
 
       onRegister: function(token) {
@@ -61,7 +93,7 @@ saveAuth = async (phone, password, sessionid = '') => {
           );
       },
 
-      senderID: "YOUR GCM SENDER ID",
+      //senderID: "568135003489",
 
       permissions: {
           alert: true,
@@ -71,13 +103,74 @@ saveAuth = async (phone, password, sessionid = '') => {
 
       popInitialNotification: true,
 
-      /**
-        * (optional) default: true
-        * - Specified if permissions (ios) and token (android and ios) will requested or not,
-        * - if not, you must call PushNotificationsHandler.requestPermissions() later
-        */
       requestPermissions: true,
   });
+}
+
+
+configureANDROIDNotifications = async (sessionid) => {
+  this.checkPermission(sessionid);
+
+  showAlert = (notification) => {
+    console.log('NOTIFY', notification)
+    if (notification._title) {
+
+      Alert.alert(
+          notification._title,
+          notification_.body,
+        [
+          {
+            text: 'Закрыть',
+            onPress: () => console.log('Cancel Pressed'),
+            style: 'cancel',
+          },
+          {text: 'Перейти', onPress: () => {
+            if (notification.message.category) {
+              let type = notification.notification.category.split(':')[0];
+              let task = notification.notification.category.split(':')[1];
+
+              getTask(sessionid, task);
+            }
+          }},
+        ],
+        {cancelable: false},
+      );
+    }
+  }
+
+  firebase.notifications().onNotification((notification) => {
+    showAlert(notification)
+  });
+
+  const message = await firebase.notifications().getInitialNotification();
+  //console.log('NOTIFY1123', message.notification._android._notification)
+  if (message.notification._title) {
+    showAlert(message)
+  }
+
+  firebase.notifications().onNotificationOpened((notificationOpen) => {
+    //console.log(notification)
+    showAlert(notificationOpen)
+  });
+}
+
+
+// Запись данных во внутренный стор телефона
+saveAuth = async (phone, password, sessionid = '') => {
+
+  if (Platform.OS === 'ios') {
+    // IOS
+    console.warn('ios notifications inited')
+    configureIOSNotifications(sessionid);
+  } else {
+    // ANDROID
+    console.warn('android notifications inited')
+    configureANDROIDNotifications(sessionid);
+  }
+
+
+
+
   try {
     await AsyncStorage.setItem('phone', phone);
     await AsyncStorage.setItem('password', password);
